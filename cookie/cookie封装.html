@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+    <script>
+    
+    
+    // var oDate = new Date();
+    // oDate.setDate(oDate.getDate() + 3); //当前时间加3
+    // console.log(oDate);
+
+    // document.cookie = 'name=aimee;max-age=' + oDate;//设置保存多长时间
+    // document.cookie = 'school=l;expires=' + oDate + ';path=/wed';//路径
+    // document.cookie = 'age=18;Max-Age=-1';//时间小于0清除
+    console.log(document.cookie);
+
+    var manageCookie = {
+        setCookie: function (name, value, time) {//设置名，值，时间
+            document.cookie = name + '=' + value + ';max-age=' + time;
+            return this;  
+        },
+        removeCookie: function (name) { // 时间是负数就是删除
+            return this.setCookie(name,'',-1)
+        },
+        getCookie: function (name, callback) {//添加一个回调方便得到数据，操作
+            //document.cookie 里面保存的所有值
+            var allCookieArr = document.cookie.split('; ');//拆分
+            for( var i = 0; i < allCookieArr.length; i++ ) {
+                var itemCookieArr = allCookieArr[i].split('=');
+                if(itemCookieArr[0] == name){
+                    callback(itemCookieArr[1]);//回调 itemCookieArr[1]参数
+                    return this; //    
+                }
+            }
+            callback(undefined);// 没获取到给个undefined
+            return this;
+        }
+    }
+    manageCookie
+        .setCookie('color','red',1000)
+        .removeCookie('age')
+        .removeCookie('color')
+        .getCookie('name',function (data) {
+            console.log(data);
+        })
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+</body>
+</html>

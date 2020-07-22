@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+ds
+
+<body>
+
+
+    <script>
+
+        var age = 18;
+        var obj = {
+            name: 'son'
+        };
+
+        window.parent.postMessage({ name: 'son' }, 'http://localhost/');//子向父页面传数据
+        window.onmessage = function (e) { console.log(e.data); }// 接收父页面数据
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <iframe src="../iframe/ds.html" frameborder="0" id="myframe"></iframe>
+    <script>
+
+        var iframe = document.getElementsByTagName('iframe')[0];
+        iframe.contentWindow.postMessage({ name: 'son' }, 'http://localhost:80/');// 父发子页面数据
+        window.onmessage = function (e) { console.log(e.data); }// 接收子页面数据
+
+    </script>
+
+</body>
+
+</html>

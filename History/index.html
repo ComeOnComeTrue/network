@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+</head>
+
+<body>
+
+    <input type="text" id="inp">
+    <button id="btn">搜索</button>
+    <ul class="wrapper"></ul>
+
+
+    <script>
+        var inp = document.getElementById('inp');
+        var btn = document.getElementById('btn');
+        var oUl = document.getElementsByClassName('wrapper')[0];
+        var data = [{
+            name: '一度'
+        }, {
+            name: '思想教育'
+        }, {
+            name: '前端'
+        }, {
+            name: '一直度'
+        }]
+        function randerDom(data) {
+            var str = '';
+            for (i = 0; i < data.length; i++) {
+                str += '<li>' + data[i].name + '</li>';
+            }
+            oUl.innerHTML = str;
+        }
+        randerDom(data);
+
+        btn.onclick = function (e) {
+            var key = inp.value;
+            var dataList = data.filter(function (ele, index) {
+                return ele.name.indexOf(key) != -1;
+                // 过滤带有key值的
+            })
+            randerDom(dataList);
+            history.pushState({ //添加记录
+                key: key, // 添加数据
+            }, null, '#word')
+        }
+        window.addEventListener('popstate', function (e) {
+            var key = e.state ? e.state.key : '';
+            var dataList = data.filter(function (ele, index) {
+                return ele.name.indexOf(key) != -1;
+            })
+            inp.value = key; // input框 显示回退的内容
+            randerDom(dataList);
+        }, false);
+
+    </script>
+</body>
+
+</html>

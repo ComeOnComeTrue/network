@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #inp{
+            width: 400px;
+            height: 60px;
+            font-size: 24px;
+        }
+        #btn{
+            height: 60px;
+        }
+        .wrapper {
+            display: none;
+            border: 1px solid red;
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="inp">
+    <input type="button" value="搜索" id="btn">
+    <div class="wrapper"></div>
+
+    <script>
+        var inp = document.getElementById('inp');
+        var wrapper = document.getElementsByClassName('wrapper')[0];
+        function aa (data) { // 获取前四个数据 渲染
+            wrapper.innerHTML = '';
+            var oUl = document.createElement('ul');
+            var list = data.result;
+            var len = 4;
+            for (var i = 0; i < 4; i++){
+                var oLi = document.createElement('li');
+                oLi.innerHTML ='<a href="https://suggest.taobao.com/sug?callback=aa&q=">' + list[i] +'</a>';
+                oUl.appendChild(oLi);
+            }
+            wrapper.appendChild(oUl);
+            wrapper.style.display = 'block';
+        }
+        var timer = null;
+        inp.oninput = function () {
+            clearTimeout(timer);
+            var self = this;
+            timer = setTimeout( function () {
+                jsonp('https://suggest.taobao.com/sug','callback', 'aa', 'q='+ self.value);
+            },1000);
+        }
+
+
+        function jsonp (url, cbName, cb, data) {//地址 回调名 回调 数据{wd:self.value,}
+            var oScript = document.createElement('script');//创建script标签
+            var src = url + '?'+ cbName + '=' + cb;
+            if (typeof data == 'string') {
+                src += '&' + data;
+            }else {
+                for (var prop in data) {
+                    if (data.hasOwnProperty(prop)) {
+                        src += '&' + prop + '=' + data[prop];
+                    }
+                }
+            }
+            oScript.src = src; 
+            document.body.appendChild(oScript);//插到页面
+            oScript.remove();//得到了数据所以删除标签
+        }
+        
+    
+    </script>
+
+
+</body>
+</html>

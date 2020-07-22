@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .demo{
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo"></div>
+    <script>
+    
+        var oDemo = document.getElementsByClassName('demo')[0];
+
+        var manageCookie = {
+        setCookie: function (name, value, time) {//设置名，值，时间
+            document.cookie = name + '=' + value + ';max-age=' + time;
+            return this;  
+        },
+        removeCookie: function (name) { // 时间是负数就是删除
+            return this.setCookie(name,'',-1)
+        },
+        getCookie: function (name, callback) {//添加一个回调方便得到数据，操作
+            //document.cookie 里面保存的所有值
+            var allCookieArr = document.cookie.split('; ');//拆分
+            for( var i = 0; i < allCookieArr.length; i++ ) {
+                var itemCookieArr = allCookieArr[i].split('=');
+                if(itemCookieArr[0] == name){
+                    callback(itemCookieArr[1]);//回调 itemCookieArr[1]参数
+                    return this; //    
+                }
+            }
+            callback(undefined);// 没获取到给个undefined
+            return this;
+        }
+    }
+
+        var drag = {
+            init: function (dom) {
+                this.dom = dom;
+                var _this = this
+                this.bindEvent();
+                manageCookie.getCookie('left',function(data){
+                   _this.dom.style.left = data + 'px'; 
+                });
+                manageCookie.getCookie('top',function(data){
+                   _this.dom.style.top = data + 'px'; 
+                });
+                
+            },
+            bindEvent: function () {
+                this.dom.onmousedown = this.mouseDown.bind(this);
+
+            },
+            mouseDown: function (e) {
+               
+                document.onmousemove = this.mouseMove.bind(this);//移动时
+                document.onmouseup = this.mouseUp.bind(this);//抬起
+
+                this.disX = e.clientX - this.dom.offsetLeft;//移动距离
+                this.disY = e.clientY - this.dom.offsetTop;
+                
+            },
+            mouseMove: function (e) {
+                this.newLeft = e.clientX - this.disX; // 得出offsetLeft
+                this.newTop = e.clientY - this.disY;
+                this.dom.style.left = this.newLeft + 'px'; 
+                this.dom.style.top = this.newTop + 'px';
+            },
+            mouseUp: function () {
+                console.log(this.newLeft,this.newTop)
+                document.onmousemove = null;
+                document.onmouseup = null;
+                manageCookie
+                    .setCookie('left',this.newLeft,1000).setCookie('top',this.newTop,1000)
+            }
+
+        }
+        drag.init(oDemo)    
+    </script>
+</body>
+</html>
